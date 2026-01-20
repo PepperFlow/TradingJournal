@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <span class="detail-value">${trade.entryPrice.toFixed(2)} USD</span>
                         </div>
                         <div class="detail-item">
-                            <span class="detail-label">Antal:</span>
+                            <span class="detail-label">Lot Size:</span>
                             <span class="detail-value">${trade.quantity}</span>
                         </div>
                         ${isClosed ? `

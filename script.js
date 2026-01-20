@@ -266,16 +266,39 @@ document.addEventListener('DOMContentLoaded', () => {
         const wins = closedTrades.filter(t => t.pnl > 0);
         const losses = closedTrades.filter(t => t.pnl < 0);
         const totalPnL = closedTrades.reduce((sum, t) => sum + (t.pnl || 0), 0);
+        const winRate = closedTrades.length > 0 ? (wins.length / closedTrades.length) * 100 : 0;
+        const lossRate = closedTrades.length > 0 ? (losses.length / closedTrades.length) * 100 : 0;
 
         document.getElementById('total-trades').textContent = trades.length;
         document.getElementById('win-trades').textContent = wins.length;
         document.getElementById('loss-trades').textContent = losses.length;
         document.getElementById('winrate').textContent =
-            closedTrades.length > 0 ? `${Math.round((wins.length / closedTrades.length) * 100)}%` : '0%';
+            closedTrades.length > 0 ? `${Math.round(winRate)}%` : '0%';
 
         const pnlElement = document.getElementById('total-pnl');
         pnlElement.textContent = `${totalPnL >= 0 ? '+' : ''}${totalPnL.toFixed(2)}`;
         pnlElement.style.color = totalPnL >= 0 ? 'var(--success)' : 'var(--danger)';
+
+        // Animate progress circles
+        animateCircle('win-circle', winRate);
+        animateCircle('loss-circle', lossRate);
+        animateCircle('winrate-circle', winRate);
+    }
+
+    function animateCircle(circleId, percentage) {
+        const circle = document.getElementById(circleId);
+        if (!circle) return;
+
+        const radius = circle.r.baseVal.value;
+        const circumference = radius * 2 * Math.PI;
+
+        circle.style.strokeDasharray = `${circumference} ${circumference}`;
+        circle.style.strokeDashoffset = circumference;
+
+        setTimeout(() => {
+            const offset = circumference - (percentage / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+        }, 100);
     }
 
     function deleteTrade(id) {

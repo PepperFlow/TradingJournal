@@ -241,6 +241,51 @@ header h1 i {
     background-clip: text;
 }
 
+/* Circular Progress Rings */
+.stat-circle-container {
+    position: relative;
+    display: inline-block;
+    margin-top: 0.5rem;
+}
+
+.progress-ring {
+    transform: rotate(-90deg);
+}
+
+.progress-ring-circle-bg {
+    opacity: 0.2;
+}
+
+.progress-ring-circle {
+    transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    stroke-linecap: round;
+}
+
+.stat-circle-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin: 0;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.7;
+    display: block;
+    margin-top: 0.3rem;
+}
+
 /* Formulär */
 .add-trade-section,
 .filter-section,

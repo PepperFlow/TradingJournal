@@ -32,15 +32,66 @@
             </div>
             <div class="stat-card win">
                 <h3>Vinster</h3>
-                <p id="win-trades">0</p>
+                <div class="stat-circle-container">
+                    <svg class="progress-ring" width="120" height="120">
+                        <circle class="progress-ring-circle-bg" stroke="#e0e0e0" stroke-width="8" fill="transparent"
+                            r="52" cx="60" cy="60" />
+                        <circle id="win-circle" class="progress-ring-circle" stroke="url(#greenGradient)"
+                            stroke-width="8" fill="transparent" r="52" cx="60" cy="60" />
+                        <defs>
+                            <linearGradient id="greenGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#11998e;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#38ef7d;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <div class="stat-circle-text">
+                        <p id="win-trades" class="stat-number">0</p>
+                        <span class="stat-label">WINS</span>
+                    </div>
+                </div>
             </div>
             <div class="stat-card loss">
                 <h3>Förluster</h3>
-                <p id="loss-trades">0</p>
+                <div class="stat-circle-container">
+                    <svg class="progress-ring" width="120" height="120">
+                        <circle class="progress-ring-circle-bg" stroke="#e0e0e0" stroke-width="8" fill="transparent"
+                            r="52" cx="60" cy="60" />
+                        <circle id="loss-circle" class="progress-ring-circle" stroke="url(#redGradient)"
+                            stroke-width="8" fill="transparent" r="52" cx="60" cy="60" />
+                        <defs>
+                            <linearGradient id="redGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#f093fb;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#f5576c;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <div class="stat-circle-text">
+                        <p id="loss-trades" class="stat-number">0</p>
+                        <span class="stat-label">LOSS</span>
+                    </div>
+                </div>
             </div>
             <div class="stat-card">
                 <h3>Win Rate</h3>
-                <p id="winrate">0%</p>
+                <div class="stat-circle-container">
+                    <svg class="progress-ring" width="120" height="120">
+                        <circle class="progress-ring-circle-bg" stroke="#e0e0e0" stroke-width="8" fill="transparent"
+                            r="52" cx="60" cy="60" />
+                        <circle id="winrate-circle" class="progress-ring-circle" stroke="url(#purpleGradient)"
+                            stroke-width="8" fill="transparent" r="52" cx="60" cy="60" />
+                        <defs>
+                            <linearGradient id="purpleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <div class="stat-circle-text">
+                        <p id="winrate" class="stat-number">0%</p>
+                        <span class="stat-label">RATE</span>
+                    </div>
+                </div>
             </div>
             <div class="stat-card profit">
                 <h3>Total P/L (SEK)</h3>

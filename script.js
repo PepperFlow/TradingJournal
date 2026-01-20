@@ -281,18 +281,36 @@ document.addEventListener('DOMContentLoaded', () => {
         const weekTrades = trades.filter(t => new Date(t.entryDate) >= weekStart);
         const monthTrades = trades.filter(t => new Date(t.entryDate) >= monthStart);
 
-        // Update displays
-        document.getElementById('total-trades').textContent = trades.length;
-        document.getElementById('today-trades').textContent = todayTrades.length;
-        document.getElementById('week-trades').textContent = weekTrades.length;
-        document.getElementById('month-trades').textContent = monthTrades.length;
-        document.getElementById('win-trades').textContent = wins.length;
-        document.getElementById('loss-trades').textContent = losses.length;
-        document.getElementById('winrate').textContent =
-            closedTrades.length > 0 ? `${Math.round(winRate)}%` : '0%';
-
+        // Update displays with animations
+        const totalTradesEl = document.getElementById('total-trades');
+        const todayTradesEl = document.getElementById('today-trades');
+        const weekTradesEl = document.getElementById('week-trades');
+        const monthTradesEl = document.getElementById('month-trades');
+        const winTradesEl = document.getElementById('win-trades');
+        const lossTradesEl = document.getElementById('loss-trades');
+        const winrateEl = document.getElementById('winrate');
         const pnlElement = document.getElementById('total-pnl');
-        pnlElement.textContent = `${totalPnL >= 0 ? '+' : ''}${totalPnL.toFixed(2)}`;
+
+        if (typeof animateValue === 'function') {
+            animateValue(totalTradesEl, 0, trades.length, 800);
+            animateValue(todayTradesEl, 0, todayTrades.length, 600);
+            animateValue(weekTradesEl, 0, weekTrades.length, 600);
+            animateValue(monthTradesEl, 0, monthTrades.length, 600);
+            animateValue(winTradesEl, 0, wins.length, 600);
+            animateValue(lossTradesEl, 0, losses.length, 600);
+            animateValue(winrateEl, 0, winRate, 800);
+            animateValue(pnlElement, 0, totalPnL, 1000);
+        } else {
+            totalTradesEl.textContent = trades.length;
+            todayTradesEl.textContent = todayTrades.length;
+            weekTradesEl.textContent = weekTrades.length;
+            monthTradesEl.textContent = monthTrades.length;
+            winTradesEl.textContent = wins.length;
+            lossTradesEl.textContent = losses.length;
+            winrateEl.textContent = closedTrades.length > 0 ? `${Math.round(winRate)}%` : '0%';
+            pnlElement.textContent = `${totalPnL >= 0 ? '+' : ''}${totalPnL.toFixed(2)}`;
+        }
+
         pnlElement.style.color = totalPnL >= 0 ? 'var(--success)' : 'var(--danger)';
 
         // Animate progress circles

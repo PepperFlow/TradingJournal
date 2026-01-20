@@ -241,6 +241,39 @@ header h1 i {
     background-clip: text;
 }
 
+.stat-card.today {
+    border-top: 3px solid #4facfe;
+}
+
+.stat-card.today p {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stat-card.week {
+    border-top: 3px solid #43e97b;
+}
+
+.stat-card.week p {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stat-card.month {
+    border-top: 3px solid #fa709a;
+}
+
+.stat-card.month p {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
 /* Circular Progress Rings */
 .stat-circle-container {
     position: relative;

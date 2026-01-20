@@ -269,7 +269,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const winRate = closedTrades.length > 0 ? (wins.length / closedTrades.length) * 100 : 0;
         const lossRate = closedTrades.length > 0 ? (losses.length / closedTrades.length) * 100 : 0;
 
+        // Time-based statistics
+        const now = new Date();
+        const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const weekStart = new Date(now);
+        weekStart.setDate(now.getDate() - now.getDay()); // Start of week (Sunday)
+        weekStart.setHours(0, 0, 0, 0);
+        const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+
+        const todayTrades = trades.filter(t => new Date(t.entryDate) >= todayStart);
+        const weekTrades = trades.filter(t => new Date(t.entryDate) >= weekStart);
+        const monthTrades = trades.filter(t => new Date(t.entryDate) >= monthStart);
+
+        // Update displays
         document.getElementById('total-trades').textContent = trades.length;
+        document.getElementById('today-trades').textContent = todayTrades.length;
+        document.getElementById('week-trades').textContent = weekTrades.length;
+        document.getElementById('month-trades').textContent = monthTrades.length;
         document.getElementById('win-trades').textContent = wins.length;
         document.getElementById('loss-trades').textContent = losses.length;
         document.getElementById('winrate').textContent =

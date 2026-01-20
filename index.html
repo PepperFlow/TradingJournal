@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="sv">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Gratis digital trading journal för traders. Spåra dina affärer, analysera resultat och förbättra din trading.">
+    <meta name="description"
+        content="Gratis digital trading journal för traders. Spåra dina affärer, analysera resultat och förbättra din trading.">
     <meta name="keywords" content="trading journal, trading log, gratis trading verktyg, trader, aktier, krypto">
     <title>Trading Journal - Gratis Digital Loggbok för Traders</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
 </head>
+
 <body>
     <header>
         <div class="container">
@@ -51,8 +54,83 @@
             <form id="trade-form" class="trade-form">
                 <div class="form-grid">
                     <div class="form-group">
-                        <label for="asset">Tillgång (t.ex. AAPL, BTC)</label>
-                        <input type="text" id="asset" required placeholder="AAPL">
+                        <label for="asset">Tillgång / Instrument</label>
+                        <input type="text" id="asset" list="asset-list" required placeholder="Välj eller skriv...">
+                        <datalist id="asset-list">
+                            <!-- Forex -->
+                            <option value="EUR/USD" data-category="forex">EUR/USD - Euro / US Dollar</option>
+                            <option value="GBP/USD" data-category="forex">GBP/USD - British Pound / US Dollar</option>
+                            <option value="USD/JPY" data-category="forex">USD/JPY - US Dollar / Japanese Yen</option>
+                            <option value="USD/CHF" data-category="forex">USD/CHF - US Dollar / Swiss Franc</option>
+                            <option value="AUD/USD" data-category="forex">AUD/USD - Australian Dollar / US Dollar
+                            </option>
+                            <option value="USD/CAD" data-category="forex">USD/CAD - US Dollar / Canadian Dollar</option>
+                            <option value="NZD/USD" data-category="forex">NZD/USD - New Zealand Dollar / US Dollar
+                            </option>
+                            <option value="EUR/GBP" data-category="forex">EUR/GBP - Euro / British Pound</option>
+                            <option value="EUR/JPY" data-category="forex">EUR/JPY - Euro / Japanese Yen</option>
+                            <option value="GBP/JPY" data-category="forex">GBP/JPY - British Pound / Japanese Yen
+                            </option>
+
+                            <!-- Metaller -->
+                            <option value="XAU/USD" data-category="metals">XAU/USD - Gold</option>
+                            <option value="XAG/USD" data-category="metals">XAG/USD - Silver</option>
+                            <option value="XPT/USD" data-category="metals">XPT/USD - Platinum</option>
+                            <option value="XPD/USD" data-category="metals">XPD/USD - Palladium</option>
+                            <option value="GC" data-category="metals">GC - Gold Futures</option>
+                            <option value="SI" data-category="metals">SI - Silver Futures</option>
+                            <option value="HG" data-category="metals">HG - Copper Futures</option>
+                            <option value="PL" data-category="metals">PL - Platinum Futures</option>
+
+                            <!-- Crypto -->
+                            <option value="BTC/USD" data-category="crypto">BTC/USD - Bitcoin</option>
+                            <option value="ETH/USD" data-category="crypto">ETH/USD - Ethereum</option>
+                            <option value="BNB/USD" data-category="crypto">BNB/USD - Binance Coin</option>
+                            <option value="XRP/USD" data-category="crypto">XRP/USD - Ripple</option>
+                            <option value="ADA/USD" data-category="crypto">ADA/USD - Cardano</option>
+                            <option value="SOL/USD" data-category="crypto">SOL/USD - Solana</option>
+                            <option value="DOGE/USD" data-category="crypto">DOGE/USD - Dogecoin</option>
+                            <option value="DOT/USD" data-category="crypto">DOT/USD - Polkadot</option>
+                            <option value="MATIC/USD" data-category="crypto">MATIC/USD - Polygon</option>
+                            <option value="AVAX/USD" data-category="crypto">AVAX/USD - Avalanche</option>
+
+                            <!-- Futures -->
+                            <option value="ES" data-category="futures">ES - S&P 500 E-mini</option>
+                            <option value="NQ" data-category="futures">NQ - Nasdaq 100 E-mini</option>
+                            <option value="YM" data-category="futures">YM - Dow Jones E-mini</option>
+                            <option value="RTY" data-category="futures">RTY - Russell 2000 E-mini</option>
+                            <option value="CL" data-category="futures">CL - Crude Oil</option>
+                            <option value="NG" data-category="futures">NG - Natural Gas</option>
+                            <option value="ZB" data-category="futures">ZB - 30-Year T-Bond</option>
+                            <option value="ZN" data-category="futures">ZN - 10-Year T-Note</option>
+                            <option value="6E" data-category="futures">6E - Euro FX</option>
+                            <option value="6B" data-category="futures">6B - British Pound</option>
+
+                            <!-- Aktier (Populära US) -->
+                            <option value="AAPL" data-category="stocks">AAPL - Apple Inc.</option>
+                            <option value="MSFT" data-category="stocks">MSFT - Microsoft Corp.</option>
+                            <option value="GOOGL" data-category="stocks">GOOGL - Alphabet Inc.</option>
+                            <option value="AMZN" data-category="stocks">AMZN - Amazon.com Inc.</option>
+                            <option value="TSLA" data-category="stocks">TSLA - Tesla Inc.</option>
+                            <option value="META" data-category="stocks">META - Meta Platforms</option>
+                            <option value="NVDA" data-category="stocks">NVDA - NVIDIA Corp.</option>
+                            <option value="JPM" data-category="stocks">JPM - JPMorgan Chase</option>
+                            <option value="V" data-category="stocks">V - Visa Inc.</option>
+                            <option value="WMT" data-category="stocks">WMT - Walmart Inc.</option>
+
+                            <!-- Nasdaq Tech -->
+                            <option value="NFLX" data-category="nasdaq">NFLX - Netflix Inc.</option>
+                            <option value="AMD" data-category="nasdaq">AMD - Advanced Micro Devices</option>
+                            <option value="INTC" data-category="nasdaq">INTC - Intel Corp.</option>
+                            <option value="CSCO" data-category="nasdaq">CSCO - Cisco Systems</option>
+                            <option value="ADBE" data-category="nasdaq">ADBE - Adobe Inc.</option>
+                            <option value="PYPL" data-category="nasdaq">PYPL - PayPal Holdings</option>
+                            <option value="QCOM" data-category="nasdaq">QCOM - Qualcomm Inc.</option>
+                            <option value="AVGO" data-category="nasdaq">AVGO - Broadcom Inc.</option>
+                            <option value="TXN" data-category="nasdaq">TXN - Texas Instruments</option>
+                            <option value="COST" data-category="nasdaq">COST - Costco Wholesale</option>
+                        </datalist>
+                        <small class="asset-hint">💡 Välj från dropdown eller skriv eget instrument</small>
                     </div>
                     <div class="form-group">
                         <label for="type">Typ</label>
@@ -135,9 +213,10 @@
 
     <footer>
         <div class="container">
-            <p>&copy; 2024 Trading Journal. Gratis och öppen källkod. 
-            <a href="https://github.com" target="_blank">GitHub</a> | 
-            <a href="#" id="clear-all">Rensa all data</a></p>
+            <p>&copy; 2024 Trading Journal. Gratis och öppen källkod.
+                <a href="https://github.com" target="_blank">GitHub</a> |
+                <a href="#" id="clear-all">Rensa all data</a>
+            </p>
         </div>
     </footer>
 
@@ -152,4 +231,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>

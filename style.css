@@ -296,6 +296,19 @@ label {
     color: var(--text-secondary);
 }
 
+.asset-hint {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    opacity: 0.8;
+    font-style: italic;
+}
+
+#asset {
+    text-transform: uppercase;
+}
+
 input,
 select,
 textarea {

@@ -199,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                         <div class="detail-item">
                             <span class="detail-label">Inkomstkurs:</span>
-                            <span class="detail-value">${trade.entryPrice.toFixed(2)} SEK</span>
+                            <span class="detail-value">${trade.entryPrice.toFixed(2)} USD</span>
                         </div>
                         <div class="detail-item">
                             <span class="detail-label">Antal:</span>
@@ -212,18 +212,18 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                             <div class="detail-item">
                                 <span class="detail-label">Utgångskurs:</span>
-                                <span class="detail-value">${trade.exitPrice.toFixed(2)} SEK</span>
+                                <span class="detail-value">${trade.exitPrice.toFixed(2)} USD</span>
                             </div>
                             <div class="detail-item">
                                 <span class="detail-label">P/L:</span>
                                 <span class="detail-value" style="color: ${pnlColor}">
-                                    ${trade.pnl >= 0 ? '+' : ''}${trade.pnl.toFixed(2)} SEK
+                                    ${trade.pnl >= 0 ? '+' : ''}${trade.pnl.toFixed(2)} USD
                                 </span>
                             </div>
                         ` : ''}
                         <div class="detail-item">
                             <span class="detail-label">Avgifter:</span>
-                            <span class="detail-value">${trade.fees.toFixed(2)} SEK</span>
+                            <span class="detail-value">${trade.fees.toFixed(2)} USD</span>
                         </div>
                     </div>
                     ${trade.notes ? `

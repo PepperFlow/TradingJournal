@@ -194,11 +194,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="trade-details">
                         <div class="detail-item">
-                            <span class="detail-label">Inkomst:</span>
+                            <span class="detail-label">Entry Date:</span>
                             <span class="detail-value">${formatDate(trade.entryDate)}</span>
                         </div>
                         <div class="detail-item">
-                            <span class="detail-label">Inkomstkurs:</span>
+                            <span class="detail-label">Entry Price:</span>
                             <span class="detail-value">${trade.entryPrice.toFixed(2)} USD</span>
                         </div>
                         <div class="detail-item">
@@ -207,11 +207,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                         ${isClosed ? `
                             <div class="detail-item">
-                                <span class="detail-label">Utgång:</span>
+                                <span class="detail-label">Exit Date:</span>
                                 <span class="detail-value">${formatDate(trade.exitDate)}</span>
                             </div>
                             <div class="detail-item">
-                                <span class="detail-label">Utgångskurs:</span>
+                                <span class="detail-label">Exit Price:</span>
                                 <span class="detail-value">${trade.exitPrice.toFixed(2)} USD</span>
                             </div>
                             <div class="detail-item">
@@ -222,13 +222,13 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                         ` : ''}
                         <div class="detail-item">
-                            <span class="detail-label">Avgifter:</span>
+                            <span class="detail-label">Fees:</span>
                             <span class="detail-value">${trade.fees.toFixed(2)} USD</span>
                         </div>
                     </div>
                     ${trade.notes ? `
                         <div class="trade-notes">
-                            <strong>Anteckningar:</strong> ${trade.notes}
+                            <strong>Notes:</strong> ${trade.notes}
                         </div>
                     ` : ''}
                     <div class="trade-actions">
@@ -318,46 +318,46 @@ document.addEventListener('DOMContentLoaded', () => {
             <input type="hidden" id="edit-id" value="${trade.id}">
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="edit-asset">Tillgång</label>
+                    <label for="edit-asset">Asset</label>
                     <input type="text" id="edit-asset" value="${trade.asset}" required>
                 </div>
                 <div class="form-group">
-                    <label for="edit-type">Typ</label>
+                    <label for="edit-type">Type</label>
                     <select id="edit-type" required>
                         <option value="long" ${trade.type === 'long' ? 'selected' : ''}>Long</option>
                         <option value="short" ${trade.type === 'short' ? 'selected' : ''}>Short</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="edit-entry-date">Inkomstdatum</label>
+                    <label for="edit-entry-date">Entry Date</label>
                     <input type="datetime-local" id="edit-entry-date" value="${trade.entryDate}" required>
                 </div>
                 <div class="form-group">
-                    <label for="edit-entry-price">Inkomstkurs</label>
+                    <label for="edit-entry-price">Entry Price</label>
                     <input type="number" id="edit-entry-price" step="0.01" value="${trade.entryPrice}" required>
                 </div>
                 <div class="form-group">
-                    <label for="edit-exit-date">Utgångsdatum</label>
+                    <label for="edit-exit-date">Exit Date</label>
                     <input type="datetime-local" id="edit-exit-date" value="${trade.exitDate || ''}">
                 </div>
                 <div class="form-group">
-                    <label for="edit-exit-price">Utgångskurs</label>
+                    <label for="edit-exit-price">Exit Price</label>
                     <input type="number" id="edit-exit-price" step="0.01" value="${trade.exitPrice || ''}">
                 </div>
                 <div class="form-group">
-                    <label for="edit-quantity">Antal</label>
+                    <label for="edit-quantity">Lot Size</label>
                     <input type="number" id="edit-quantity" step="0.01" value="${trade.quantity}" required>
                 </div>
                 <div class="form-group">
-                    <label for="edit-fees">Avgifter</label>
+                    <label for="edit-fees">Fees</label>
                     <input type="number" id="edit-fees" step="0.01" value="${trade.fees}">
                 </div>
             </div>
             <div class="form-group">
-                <label for="edit-notes">Anteckningar</label>
+                <label for="edit-notes">Notes</label>
                 <textarea id="edit-notes" rows="3">${trade.notes || ''}</textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Uppdatera Affär</button>
+            <button type="submit" class="btn btn-primary">Update Trade</button>
         `;
 
         editModal.style.display = 'block';

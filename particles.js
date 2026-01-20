@@ -1,16 +1,19 @@
-// Liquid Wave Background Animation
-class LiquidWaves {
+// Manga Halftone Dots Background
+class MangaHalftone {
     constructor() {
         this.canvas = document.getElementById('particles-canvas');
         this.ctx = this.canvas.getContext('2d');
-        this.waves = [];
+        this.dots = [];
         this.time = 0;
 
         this.resize();
-        this.createWaves();
+        this.createDots();
         this.animate();
 
-        window.addEventListener('resize', () => this.resize());
+        window.addEventListener('resize', () => {
+            this.resize();
+            this.createDots();
+        });
     }
 
     resize() {
@@ -18,74 +21,64 @@ class LiquidWaves {
         this.canvas.height = window.innerHeight;
     }
 
-    createWaves() {
-        // Create multiple wave layers with different properties
-        this.waves = [
-            {
-                y: this.canvas.height * 0.3,
-                length: 0.01,
-                amplitude: 80,
-                frequency: 0.015,
-                speed: 0.02,
-                color: 'rgba(102, 126, 234, 0.1)'
-            },
-            {
-                y: this.canvas.height * 0.4,
-                length: 0.015,
-                amplitude: 60,
-                frequency: 0.02,
-                speed: 0.015,
-                color: 'rgba(118, 75, 162, 0.08)'
-            },
-            {
-                y: this.canvas.height * 0.5,
-                length: 0.02,
-                amplitude: 100,
-                frequency: 0.01,
-                speed: 0.025,
-                color: 'rgba(102, 126, 234, 0.06)'
-            },
-            {
-                y: this.canvas.height * 0.65,
-                length: 0.012,
-                amplitude: 70,
-                frequency: 0.018,
-                speed: 0.01,
-                color: 'rgba(118, 75, 162, 0.05)'
-            }
-        ];
-    }
+    createDots() {
+        this.dots = [];
+        const spacing = 30; // Space between dots
+        const cols = Math.ceil(this.canvas.width / spacing);
+        const rows = Math.ceil(this.canvas.height / spacing);
 
-    drawWave(wave, time) {
-        this.ctx.beginPath();
-        this.ctx.moveTo(0, this.canvas.height);
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < cols; col++) {
+                const x = col * spacing + spacing / 2;
+                const y = row * spacing + spacing / 2;
 
-        for (let x = 0; x < this.canvas.width; x++) {
-            const y = wave.y +
-                Math.sin(x * wave.length + time * wave.speed) * wave.amplitude +
-                Math.sin(x * wave.frequency + time * wave.speed * 1.5) * (wave.amplitude * 0.5);
+                // Calculate distance from center for radial pattern
+                const centerX = this.canvas.width / 2;
+                const centerY = this.canvas.height / 2;
+                const distanceFromCenter = Math.sqrt(
+                    Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2)
+                );
 
-            if (x === 0) {
-                this.ctx.lineTo(x, y);
-            } else {
-                this.ctx.lineTo(x, y);
+                this.dots.push({
+                    x,
+                    y,
+                    baseSize: 2,
+                    maxSize: 8,
+                    distanceFromCenter,
+                    phase: Math.random() * Math.PI * 2,
+                    speed: 0.02 + Math.random() * 0.01
+                });
             }
         }
-
-        this.ctx.lineTo(this.canvas.width, this.canvas.height);
-        this.ctx.lineTo(0, this.canvas.height);
-        this.ctx.closePath();
-
-        this.ctx.fillStyle = wave.color;
-        this.ctx.fill();
     }
 
     animate() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        // Draw waves from back to front
-        this.waves.forEach(wave => {
-            this.drawWave(wave, this.time);
+        this.dots.forEach(dot => {
+            // Animate size based on sine wave and distance from center
+            const wave1 = Math.sin(this.time * dot.speed + dot.phase);
+            const wave2 = Math.sin(dot.distanceFromCenter * 0.01 + this.time * 0.02);
+            const sizeFactor = (wave1 + 1) / 2 * (wave2 + 1) / 2;
+
+            const size = dot.baseSize + (dot.maxSize - dot.baseSize) * sizeFactor;
+
+            // Calculate opacity based on size
+            const opacity = 0.1 + sizeFactor * 0.15;
+
+            // Draw dot
+            this.ctx.beginPath();
+            this.ctx.arc(dot.x, dot.y, size, 0, Math.PI * 2);
+            this.ctx.fillStyle = `rgba(102, 126, 234, ${opacity})`;
+            this.ctx.fill();
+
+            // Add occasional purple dots for variation
+            if (Math.random() > 0.85) {
+                this.ctx.beginPath();
+                this.ctx.arc(dot.x, dot.y, size * 0.5, 0, Math.PI * 2);
+                this.ctx.fillStyle = `rgba(118, 75, 162, ${opacity * 0.8})`;
+                this.ctx.fill();
+            }
         });
 
         this.time += 1;
@@ -95,7 +88,7 @@ class LiquidWaves {
 
 // Initialize when DOM is ready
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => new LiquidWaves());
+    document.addEventListener('DOMContentLoaded', () => new MangaHalftone());
 } else {
-    new LiquidWaves();
+    new MangaHalftone();
 }

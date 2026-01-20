@@ -53,6 +53,76 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target === editModal) editModal.style.display = 'none';
     });
 
+    // Category Pills & Quick Picks  
+    const categoryModal = document.getElementById('category-modal');
+    const modalClose = categoryModal.querySelector('.modal-close');
+    const categoryPills = document.querySelectorAll('.category-pill');
+    const quickPickChips = document.querySelectorAll('.quick-pick-chip');
+    const assetInput = document.getElementById('asset');
+
+    // Category pill click handlers
+    categoryPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+            const category = pill.dataset.category;
+            showCategoryModal(category);
+        });
+    });
+
+    // Quick pick chip handlers
+    quickPickChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+            const asset = chip.dataset.asset;
+            assetInput.value = asset;
+            assetInput.focus();
+        });
+    });
+
+    // Modal close handlers
+    modalClose.addEventListener('click', () => {
+        categoryModal.style.display = 'none';
+    });
+
+    categoryModal.addEventListener('click', (e) => {
+        if (e.target === categoryModal) {
+            categoryModal.style.display = 'none';
+        }
+    });
+
+    function showCategoryModal(category) {
+        const assets = ASSET_CATEGORIES[category];
+        const categoryNames = {
+            forex: '💱 FOREX - Valutapar',
+            metals: '🥇 METALLER - Ädelmetaller',
+            crypto: '💰 CRYPTO - Kryptovalutor',
+            futures: '📈 FUTURES - Terminskontrakt',
+            stocks: '🏢 AKTIER - US Aktier',
+            nasdaq: '💻 NASDAQ - Tech Aktier'
+        };
+
+        document.getElementById('modal-category-title').textContent = categoryNames[category];
+
+        const assetsList = document.getElementById('modal-assets-list');
+        assetsList.innerHTML = assets.map(asset => `
+            <div class="modal-asset-item" data-symbol="${asset.symbol}">
+                <div>
+                    <span class="modal-asset-symbol">${asset.symbol}</span>
+                    <span class="modal-asset-name">${asset.name}</span>
+                </div>
+            </div>
+        `).join('');
+
+        // Add click handlers to modal items
+        assetsList.querySelectorAll('.modal-asset-item').forEach(item => {
+            item.addEventListener('click', () => {
+                assetInput.value = item.dataset.symbol;
+                categoryModal.style.display = 'none';
+                assetInput.focus();
+            });
+        });
+
+        categoryModal.style.display = 'flex';
+    }
+
     // Initial render
     renderTrades();
     updateStats();
@@ -60,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Funktioner
     function handleAddTrade(e) {
         e.preventDefault();
-        
+
         const trade = {
             id: Date.now(),
             asset: document.getElementById('asset').value.toUpperCase(),
@@ -108,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const isClosed = !!trade.exitDate;
             const statusClass = isClosed ? (trade.pnl >= 0 ? 'win' : 'loss') : '';
             const pnlColor = trade.pnl >= 0 ? 'var(--success)' : 'var(--danger)';
-            
+
             return `
                 <div class="trade-card ${trade.type} ${statusClass}" data-id="${trade.id}">
                     <div class="trade-header">
@@ -116,10 +186,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             ${trade.asset} - ${trade.type === 'long' ? '📈 Long' : '📉 Short'}
                         </div>
                         <div class="trade-status">
-                            ${isClosed ? 
-                                `<span class="status-badge status-closed">Stängd</span>` : 
-                                `<span class="status-badge status-open">Öppen</span>`
-                            }
+                            ${isClosed ?
+                    `<span class="status-badge status-closed">Stängd</span>` :
+                    `<span class="status-badge status-open">Öppen</span>`
+                }
                         </div>
                     </div>
                     <div class="trade-details">
@@ -183,10 +253,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const matchesAsset = !assetFilter || trade.asset.toLowerCase().includes(assetFilter);
             const matchesType = !typeFilter || trade.type === typeFilter;
             const isClosed = !!trade.exitDate;
-            const matchesStatus = !statusFilter || 
-                (statusFilter === 'closed' && isClosed) || 
+            const matchesStatus = !statusFilter ||
+                (statusFilter === 'closed' && isClosed) ||
                 (statusFilter === 'open' && !isClosed);
-            
+
             return matchesAsset && matchesType && matchesStatus;
         }).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     }
@@ -200,9 +270,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('total-trades').textContent = trades.length;
         document.getElementById('win-trades').textContent = wins.length;
         document.getElementById('loss-trades').textContent = losses.length;
-        document.getElementById('winrate').textContent = 
+        document.getElementById('winrate').textContent =
             closedTrades.length > 0 ? `${Math.round((wins.length / closedTrades.length) * 100)}%` : '0%';
-        
+
         const pnlElement = document.getElementById('total-pnl');
         pnlElement.textContent = `${totalPnL >= 0 ? '+' : ''}${totalPnL.toFixed(2)}`;
         pnlElement.style.color = totalPnL >= 0 ? 'var(--success)' : 'var(--danger)';
@@ -268,7 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
 
         editModal.style.display = 'block';
-        
+
         editForm.onsubmit = (e) => {
             e.preventDefault();
             updateTrade();
@@ -278,7 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateTrade() {
         const id = parseInt(document.getElementById('edit-id').value);
         const index = trades.findIndex(t => t.id === id);
-        
+
         if (index === -1) return;
 
         const updatedTrade = {
@@ -369,9 +439,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function formatDate(dateString) {
         if (!dateString) return '-';
         const date = new Date(dateString);
-        return date.toLocaleString('sv-SE', { 
-            year: 'numeric', 
-            month: 'short', 
+        return date.toLocaleString('sv-SE', {
+            year: 'numeric',
+            month: 'short',
             day: 'numeric',
             hour: '2-digit',
             minute: '2-digit'

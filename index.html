@@ -53,84 +53,70 @@
             <h2><i class="fas fa-plus-circle"></i> Lägg till ny affär</h2>
             <form id="trade-form" class="trade-form">
                 <div class="form-grid">
-                    <div class="form-group">
-                        <label for="asset">Tillgång / Instrument</label>
-                        <input type="text" id="asset" list="asset-list" required placeholder="Välj eller skriv...">
-                        <datalist id="asset-list">
-                            <!-- Forex -->
-                            <option value="EUR/USD" data-category="forex">EUR/USD - Euro / US Dollar</option>
-                            <option value="GBP/USD" data-category="forex">GBP/USD - British Pound / US Dollar</option>
-                            <option value="USD/JPY" data-category="forex">USD/JPY - US Dollar / Japanese Yen</option>
-                            <option value="USD/CHF" data-category="forex">USD/CHF - US Dollar / Swiss Franc</option>
-                            <option value="AUD/USD" data-category="forex">AUD/USD - Australian Dollar / US Dollar
-                            </option>
-                            <option value="USD/CAD" data-category="forex">USD/CAD - US Dollar / Canadian Dollar</option>
-                            <option value="NZD/USD" data-category="forex">NZD/USD - New Zealand Dollar / US Dollar
-                            </option>
-                            <option value="EUR/GBP" data-category="forex">EUR/GBP - Euro / British Pound</option>
-                            <option value="EUR/JPY" data-category="forex">EUR/JPY - Euro / Japanese Yen</option>
-                            <option value="GBP/JPY" data-category="forex">GBP/JPY - British Pound / Japanese Yen
-                            </option>
+                    <div class="form-group asset-selector-group">
+                        <label for="asset">Välj Instrument</label>
 
-                            <!-- Metaller -->
-                            <option value="XAU/USD" data-category="metals">XAU/USD - Gold</option>
-                            <option value="XAG/USD" data-category="metals">XAG/USD - Silver</option>
-                            <option value="XPT/USD" data-category="metals">XPT/USD - Platinum</option>
-                            <option value="XPD/USD" data-category="metals">XPD/USD - Palladium</option>
-                            <option value="GC" data-category="metals">GC - Gold Futures</option>
-                            <option value="SI" data-category="metals">SI - Silver Futures</option>
-                            <option value="HG" data-category="metals">HG - Copper Futures</option>
-                            <option value="PL" data-category="metals">PL - Platinum Futures</option>
+                        <!-- Category Pills -->
+                        <div class="category-pills">
+                            <button type="button" class="category-pill forex-pill" data-category="forex">
+                                <span class="pill-icon">💱</span>
+                                <span class="pill-label">FOREX</span>
+                                <span class="pill-count">10</span>
+                            </button>
+                            <button type="button" class="category-pill metals-pill" data-category="metals">
+                                <span class="pill-icon">🥇</span>
+                                <span class="pill-label">METALLER</span>
+                                <span class="pill-count">8</span>
+                            </button>
+                            <button type="button" class="category-pill crypto-pill" data-category="crypto">
+                                <span class="pill-icon">💰</span>
+                                <span class="pill-label">CRYPTO</span>
+                                <span class="pill-count">10</span>
+                            </button>
+                            <button type="button" class="category-pill futures-pill" data-category="futures">
+                                <span class="pill-icon">📈</span>
+                                <span class="pill-label">FUTURES</span>
+                                <span class="pill-count">10</span>
+                            </button>
+                            <button type="button" class="category-pill stocks-pill" data-category="stocks">
+                                <span class="pill-icon">🏢</span>
+                                <span class="pill-label">AKTIER</span>
+                                <span class="pill-count">10</span>
+                            </button>
+                            <button type="button" class="category-pill nasdaq-pill" data-category="nasdaq">
+                                <span class="pill-icon">💻</span>
+                                <span class="pill-label">NASDAQ</span>
+                                <span class="pill-count">10</span>
+                            </button>
+                        </div>
 
-                            <!-- Crypto -->
-                            <option value="BTC/USD" data-category="crypto">BTC/USD - Bitcoin</option>
-                            <option value="ETH/USD" data-category="crypto">ETH/USD - Ethereum</option>
-                            <option value="BNB/USD" data-category="crypto">BNB/USD - Binance Coin</option>
-                            <option value="XRP/USD" data-category="crypto">XRP/USD - Ripple</option>
-                            <option value="ADA/USD" data-category="crypto">ADA/USD - Cardano</option>
-                            <option value="SOL/USD" data-category="crypto">SOL/USD - Solana</option>
-                            <option value="DOGE/USD" data-category="crypto">DOGE/USD - Dogecoin</option>
-                            <option value="DOT/USD" data-category="crypto">DOT/USD - Polkadot</option>
-                            <option value="MATIC/USD" data-category="crypto">MATIC/USD - Polygon</option>
-                            <option value="AVAX/USD" data-category="crypto">AVAX/USD - Avalanche</option>
+                        <!-- Quick Picks -->
+                        <div class="quick-picks">
+                            <span class="quick-picks-label">⚡ Populära:</span>
+                            <button type="button" class="quick-pick-chip" data-asset="EUR/USD">EUR/USD</button>
+                            <button type="button" class="quick-pick-chip" data-asset="XAU/USD">XAU/USD</button>
+                            <button type="button" class="quick-pick-chip" data-asset="BTC/USD">BTC/USD</button>
+                            <button type="button" class="quick-pick-chip" data-asset="ES">ES</button>
+                            <button type="button" class="quick-pick-chip" data-asset="AAPL">AAPL</button>
+                            <button type="button" class="quick-pick-chip" data-asset="TSLA">TSLA</button>
+                        </div>
 
-                            <!-- Futures -->
-                            <option value="ES" data-category="futures">ES - S&P 500 E-mini</option>
-                            <option value="NQ" data-category="futures">NQ - Nasdaq 100 E-mini</option>
-                            <option value="YM" data-category="futures">YM - Dow Jones E-mini</option>
-                            <option value="RTY" data-category="futures">RTY - Russell 2000 E-mini</option>
-                            <option value="CL" data-category="futures">CL - Crude Oil</option>
-                            <option value="NG" data-category="futures">NG - Natural Gas</option>
-                            <option value="ZB" data-category="futures">ZB - 30-Year T-Bond</option>
-                            <option value="ZN" data-category="futures">ZN - 10-Year T-Note</option>
-                            <option value="6E" data-category="futures">6E - Euro FX</option>
-                            <option value="6B" data-category="futures">6B - British Pound</option>
+                        <!-- Custom Input -->
+                        <div class="custom-asset-input">
+                            <input type="text" id="asset" required placeholder="Eller skriv eget instrument...">
+                            <small class="asset-hint">💡 Klicka på kategori ovan för att se alla alternativ</small>
+                        </div>
 
-                            <!-- Aktier (Populära US) -->
-                            <option value="AAPL" data-category="stocks">AAPL - Apple Inc.</option>
-                            <option value="MSFT" data-category="stocks">MSFT - Microsoft Corp.</option>
-                            <option value="GOOGL" data-category="stocks">GOOGL - Alphabet Inc.</option>
-                            <option value="AMZN" data-category="stocks">AMZN - Amazon.com Inc.</option>
-                            <option value="TSLA" data-category="stocks">TSLA - Tesla Inc.</option>
-                            <option value="META" data-category="stocks">META - Meta Platforms</option>
-                            <option value="NVDA" data-category="stocks">NVDA - NVIDIA Corp.</option>
-                            <option value="JPM" data-category="stocks">JPM - JPMorgan Chase</option>
-                            <option value="V" data-category="stocks">V - Visa Inc.</option>
-                            <option value="WMT" data-category="stocks">WMT - Walmart Inc.</option>
-
-                            <!-- Nasdaq Tech -->
-                            <option value="NFLX" data-category="nasdaq">NFLX - Netflix Inc.</option>
-                            <option value="AMD" data-category="nasdaq">AMD - Advanced Micro Devices</option>
-                            <option value="INTC" data-category="nasdaq">INTC - Intel Corp.</option>
-                            <option value="CSCO" data-category="nasdaq">CSCO - Cisco Systems</option>
-                            <option value="ADBE" data-category="nasdaq">ADBE - Adobe Inc.</option>
-                            <option value="PYPL" data-category="nasdaq">PYPL - PayPal Holdings</option>
-                            <option value="QCOM" data-category="nasdaq">QCOM - Qualcomm Inc.</option>
-                            <option value="AVGO" data-category="nasdaq">AVGO - Broadcom Inc.</option>
-                            <option value="TXN" data-category="nasdaq">TXN - Texas Instruments</option>
-                            <option value="COST" data-category="nasdaq">COST - Costco Wholesale</option>
-                        </datalist>
-                        <small class="asset-hint">💡 Välj från dropdown eller skriv eget instrument</small>
+                        <!-- Category Modal -->
+                        <div id="category-modal" class="category-modal" style="display: none;">
+                            <div class="category-modal-content">
+                                <div class="category-modal-header">
+                                    <h3 id="modal-category-title"></h3>
+                                    <button type="button" class="modal-close">&times;</button>
+                                </div>
+                                <div id="modal-assets-list" class="modal-assets-list"></div>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="type">Typ</label>
@@ -229,6 +215,7 @@
         </div>
     </div>
 
+    <script src="assets.js"></script>
     <script src="script.js"></script>
 </body>
 

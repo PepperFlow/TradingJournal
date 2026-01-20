@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Gratis digital trading journal för traders. Spåra dina affärer, analysera resultat och förbättra din trading.">
+    <meta name="keywords" content="trading journal, trading log, gratis trading verktyg, trader, aktier, krypto">
+    <title>Trading Journal - Gratis Digital Loggbok för Traders</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><i class="fas fa-chart-line"></i> Trading Journal</h1>
+            <button id="theme-toggle" aria-label="Växla ljus/mörkt tema">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Snabbstatistik -->
+        <section id="stats" class="stats-grid">
+            <div class="stat-card">
+                <h3>Totala Affärer</h3>
+                <p id="total-trades">0</p>
+            </div>
+            <div class="stat-card win">
+                <h3>Vinster</h3>
+                <p id="win-trades">0</p>
+            </div>
+            <div class="stat-card loss">
+                <h3>Förluster</h3>
+                <p id="loss-trades">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Win Rate</h3>
+                <p id="winrate">0%</p>
+            </div>
+            <div class="stat-card profit">
+                <h3>Total P/L (SEK)</h3>
+                <p id="total-pnl">0.00</p>
+            </div>
+        </section>
+
+        <!-- Lägg till ny affär -->
+        <section class="add-trade-section">
+            <h2><i class="fas fa-plus-circle"></i> Lägg till ny affär</h2>
+            <form id="trade-form" class="trade-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="asset">Tillgång (t.ex. AAPL, BTC)</label>
+                        <input type="text" id="asset" required placeholder="AAPL">
+                    </div>
+                    <div class="form-group">
+                        <label for="type">Typ</label>
+                        <select id="type" required>
+                            <option value="long">Long (Köp)</option>
+                            <option value="short">Short (Sälj)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="entry-date">Inkomstdatum</label>
+                        <input type="datetime-local" id="entry-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="entry-price">Inkomstkurs</label>
+                        <input type="number" id="entry-price" step="0.01" required placeholder="150.50">
+                    </div>
+                    <div class="form-group">
+                        <label for="exit-date">Utgångsdatum</label>
+                        <input type="datetime-local" id="exit-date">
+                    </div>
+                    <div class="form-group">
+                        <label for="exit-price">Utgångskurs</label>
+                        <input type="number" id="exit-price" step="0.01" placeholder="155.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="quantity">Antal/Kvantitet</label>
+                        <input type="number" id="quantity" step="0.01" required placeholder="10">
+                    </div>
+                    <div class="form-group">
+                        <label for="fees">Avgifter (SEK)</label>
+                        <input type="number" id="fees" step="0.01" placeholder="9.95">
+                    </div>
+                </div>
+                <div class="form-group full-width">
+                    <label for="notes">Anteckningar & Analys</label>
+                    <textarea id="notes" rows="3" placeholder="Varför tog du denna affär? Vad lärde du dig?"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Spara Affär
+                    </button>
+                    <button type="button" id="export-btn" class="btn btn-secondary">
+                        <i class="fas fa-download"></i> Exportera Data
+                    </button>
+                    <input type="file" id="import-file" accept=".json" style="display: none;">
+                    <button type="button" id="import-btn" class="btn btn-secondary">
+                        <i class="fas fa-upload"></i> Importera Data
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Filter -->
+        <section class="filter-section">
+            <h3><i class="fas fa-filter"></i> Filtrera affärer</h3>
+            <div class="filter-controls">
+                <input type="text" id="filter-asset" placeholder="Filtrera på tillgång...">
+                <select id="filter-type">
+                    <option value="">Alla typer</option>
+                    <option value="long">Long</option>
+                    <option value="short">Short</option>
+                </select>
+                <select id="filter-status">
+                    <option value="">Alla status</option>
+                    <option value="open">Öppna</option>
+                    <option value="closed">Stängda</option>
+                </select>
+                <button id="clear-filters" class="btn btn-small">Rensa filter</button>
+            </div>
+        </section>
+
+        <!-- Affärshistorik -->
+        <section class="trades-section">
+            <h2><i class="fas fa-list"></i> Affärshistorik</h2>
+            <div id="trades-list" class="trades-list">
+                <p class="empty-state">Inga affärer ännu. Lägg till din första affär ovan!</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Trading Journal. Gratis och öppen källkod. 
+            <a href="https://github.com" target="_blank">GitHub</a> | 
+            <a href="#" id="clear-all">Rensa all data</a></p>
+        </div>
+    </footer>
+
+    <!-- Modal för redigering -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Redigera Affär</h2>
+            <form id="edit-form"></form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

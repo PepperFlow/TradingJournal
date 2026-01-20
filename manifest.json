@@ -1,0 +1,16 @@
+{
+    "name": "Trading Journal - Gratis Digital Loggbok",
+    "short_name": "Trading Journal",
+    "description": "Gratis trading journal för att spåra och analysera dina affärer",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#0066ff",
+    "icons": [
+        {
+            "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        }
+    ]
+}

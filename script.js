@@ -91,12 +91,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function showCategoryModal(category) {
         const assets = ASSET_CATEGORIES[category];
         const categoryNames = {
-            forex: '💱 FOREX - Valutapar',
-            metals: '🥇 METALLER - Ädelmetaller',
-            crypto: '💰 CRYPTO - Kryptovalutor',
-            futures: '📈 FUTURES - Terminskontrakt',
-            stocks: '🏢 AKTIER - US Aktier',
-            nasdaq: '💻 NASDAQ - Tech Aktier'
+            forex: 'FOREX - Currency Pairs',
+            metals: 'METALS - Precious Metals',
+            crypto: 'CRYPTO - Cryptocurrencies',
+            futures: 'FUTURES - Futures Contracts',
+            stocks: 'STOCKS - US Stocks',
+            nasdaq: 'NASDAQ - Tech Stocks'
         };
 
         document.getElementById('modal-category-title').textContent = categoryNames[category];
@@ -183,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="trade-card ${trade.type} ${statusClass}" data-id="${trade.id}">
                     <div class="trade-header">
                         <div class="trade-title">
-                            ${trade.asset} - ${trade.type === 'long' ? '📈 Long' : '📉 Short'}
+                            ${trade.asset} - ${trade.type === 'long' ? 'Long' : 'Short'}
                         </div>
                         <div class="trade-status">
                             ${isClosed ?

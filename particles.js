@@ -1,19 +1,16 @@
-// Bokeh Light Particles Background
-class BokehParticles {
+// Electric Lightning Bolts Background
+class ElectricLightning {
     constructor() {
         this.canvas = document.getElementById('particles-canvas');
         this.ctx = this.canvas.getContext('2d');
+        this.lightningBolts = [];
         this.particles = [];
         this.time = 0;
 
         this.resize();
-        this.createParticles();
         this.animate();
 
-        window.addEventListener('resize', () => {
-            this.resize();
-            this.createParticles();
-        });
+        window.addEventListener('resize', () => this.resize());
     }
 
     resize() {
@@ -21,100 +18,159 @@ class BokehParticles {
         this.canvas.height = window.innerHeight;
     }
 
-    createParticles() {
-        this.particles = [];
-        const particleCount = 35;
-
+    createLightningBolt() {
         const colors = [
-            { r: 102, g: 126, b: 234, name: 'blue' },      // Primary blue
-            { r: 118, g: 75, b: 162, name: 'purple' },     // Purple
-            { r: 56, g: 239, b: 125, name: 'green' },      // Success green
-            { r: 245, g: 87, b: 108, name: 'pink' },       // Danger pink
-            { r: 255, g: 167, b: 81, name: 'orange' }      // Warning orange
+            { r: 102, g: 126, b: 234 },  // Electric blue
+            { r: 0, g: 242, b: 254 },    // Cyan
+            { r: 138, g: 43, b: 226 },   // Purple
+            { r: 56, g: 239, b: 125 }    // Green
         ];
 
-        for (let i = 0; i < particleCount; i++) {
-            const color = colors[Math.floor(Math.random() * colors.length)];
-            this.particles.push({
-                x: Math.random() * this.canvas.width,
-                y: Math.random() * this.canvas.height,
-                size: Math.random() * 80 + 40,
-                speedX: (Math.random() - 0.5) * 0.5,
-                speedY: (Math.random() - 0.5) * 0.5,
-                color: color,
-                opacity: Math.random() * 0.3 + 0.1,
-                pulseSpeed: Math.random() * 0.02 + 0.01,
-                pulsePhase: Math.random() * Math.PI * 2,
-                blur: Math.random() * 20 + 10
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const startX = Math.random() * this.canvas.width;
+        const startY = 0;
+        const endX = Math.random() * this.canvas.width;
+        const endY = this.canvas.height;
+
+        const segments = [];
+        const numSegments = 15 + Math.floor(Math.random() * 10);
+
+        let currentX = startX;
+        let currentY = startY;
+
+        for (let i = 0; i < numSegments; i++) {
+            const nextX = currentX + (Math.random() - 0.5) * 100;
+            const nextY = currentY + (endY - startY) / numSegments;
+
+            segments.push({
+                x1: currentX,
+                y1: currentY,
+                x2: nextX,
+                y2: nextY
             });
+
+            currentX = nextX;
+            currentY = nextY;
         }
+
+        // Force last segment to end point
+        segments[segments.length - 1].x2 = endX;
+        segments[segments.length - 1].y2 = endY;
+
+        return {
+            segments,
+            color,
+            life: 1.0,
+            decay: 0.05 + Math.random() * 0.05,
+            thickness: 2 + Math.random() * 3,
+            glowIntensity: 0.8 + Math.random() * 0.4
+        };
     }
 
-    drawBokeh(particle) {
-        // Update position
-        particle.x += particle.speedX;
-        particle.y += particle.speedY;
+    createBranchBolt(parentBolt, segmentIndex) {
+        const segment = parentBolt.segments[segmentIndex];
+        const branches = [];
 
-        // Wrap around screen
-        if (particle.x > this.canvas.width + particle.size) {
-            particle.x = -particle.size;
+        // 30% chance to create branch
+        if (Math.random() < 0.3) {
+            const numBranches = 1 + Math.floor(Math.random() * 2);
+
+            for (let i = 0; i < numBranches; i++) {
+                const branchSegments = [];
+                const branchLength = 3 + Math.floor(Math.random() * 5);
+
+                let currentX = segment.x1;
+                let currentY = segment.y1;
+
+                for (let j = 0; j < branchLength; j++) {
+                    const nextX = currentX + (Math.random() - 0.5) * 80;
+                    const nextY = currentY + Math.random() * 50;
+
+                    branchSegments.push({
+                        x1: currentX,
+                        y1: currentY,
+                        x2: nextX,
+                        y2: nextY
+                    });
+
+                    currentX = nextX;
+                    currentY = nextY;
+                }
+
+                branches.push({
+                    segments: branchSegments,
+                    color: parentBolt.color,
+                    life: parentBolt.life * 0.7,
+                    decay: parentBolt.decay * 1.5,
+                    thickness: parentBolt.thickness * 0.6,
+                    glowIntensity: parentBolt.glowIntensity * 0.8
+                });
+            }
         }
-        if (particle.x < -particle.size) {
-            particle.x = this.canvas.width + particle.size;
-        }
-        if (particle.y > this.canvas.height + particle.size) {
-            particle.y = -particle.size;
-        }
-        if (particle.y < -particle.size) {
-            particle.y = this.canvas.height + particle.size;
-        }
 
-        // Pulsing effect
-        const pulse = Math.sin(this.time * particle.pulseSpeed + particle.pulsePhase);
-        const currentOpacity = particle.opacity + pulse * 0.1;
-        const currentSize = particle.size + pulse * 10;
+        return branches;
+    }
 
-        // Save context for individual blur
-        this.ctx.save();
+    drawLightning(bolt) {
+        const { segments, color, life, thickness, glowIntensity } = bolt;
 
-        // Apply blur effect
-        this.ctx.filter = `blur(${particle.blur}px)`;
+        segments.forEach((segment, index) => {
+            // Main lightning bolt
+            this.ctx.save();
+            this.ctx.shadowBlur = 20 * glowIntensity * life;
+            this.ctx.shadowColor = `rgba(${color.r}, ${color.g}, ${color.b}, ${life})`;
+            this.ctx.strokeStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${life})`;
+            this.ctx.lineWidth = thickness;
+            this.ctx.lineCap = 'round';
 
-        // Create radial gradient for bokeh effect
-        const gradient = this.ctx.createRadialGradient(
-            particle.x, particle.y, 0,
-            particle.x, particle.y, currentSize
-        );
+            this.ctx.beginPath();
+            this.ctx.moveTo(segment.x1, segment.y1);
+            this.ctx.lineTo(segment.x2, segment.y2);
+            this.ctx.stroke();
+            this.ctx.restore();
 
-        // Bokeh circle has bright center and fades out
-        gradient.addColorStop(0, `rgba(${particle.color.r}, ${particle.color.g}, ${particle.color.b}, ${currentOpacity * 1.2})`);
-        gradient.addColorStop(0.4, `rgba(${particle.color.r}, ${particle.color.g}, ${particle.color.b}, ${currentOpacity})`);
-        gradient.addColorStop(1, `rgba(${particle.color.r}, ${particle.color.g}, ${particle.color.b}, 0)`);
+            // Outer glow
+            this.ctx.save();
+            this.ctx.shadowBlur = 40 * glowIntensity * life;
+            this.ctx.shadowColor = `rgba(${color.r}, ${color.g}, ${color.b}, ${life * 0.3})`;
+            this.ctx.strokeStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${life * 0.3})`;
+            this.ctx.lineWidth = thickness * 3;
 
-        // Draw bokeh circle
-        this.ctx.beginPath();
-        this.ctx.arc(particle.x, particle.y, currentSize, 0, Math.PI * 2);
-        this.ctx.fillStyle = gradient;
-        this.ctx.fill();
+            this.ctx.beginPath();
+            this.ctx.moveTo(segment.x1, segment.y1);
+            this.ctx.lineTo(segment.x2, segment.y2);
+            this.ctx.stroke();
+            this.ctx.restore();
 
-        // Add subtle ring effect for more realistic bokeh
-        this.ctx.beginPath();
-        this.ctx.arc(particle.x, particle.y, currentSize * 0.7, 0, Math.PI * 2);
-        this.ctx.strokeStyle = `rgba(255, 255, 255, ${currentOpacity * 0.3})`;
-        this.ctx.lineWidth = 2;
-        this.ctx.stroke();
-
-        this.ctx.restore();
+            // Create branches
+            if (index % 3 === 0 && life > 0.8) {
+                const branches = this.createBranchBolt(bolt, index);
+                branches.forEach(branch => {
+                    this.lightningBolts.push(branch);
+                });
+            }
+        });
     }
 
     animate() {
-        // Clear canvas with slight fade
-        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.02)';
+        // Dark fade for trail effect
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        // Draw all bokeh particles
-        this.particles.forEach(particle => {
-            this.drawBokeh(particle);
+        // Random chance to create new lightning
+        if (Math.random() < 0.05) {
+            this.lightningBolts.push(this.createLightningBolt());
+        }
+
+        // Update and draw lightning bolts
+        this.lightningBolts = this.lightningBolts.filter(bolt => {
+            bolt.life -= bolt.decay;
+
+            if (bolt.life > 0) {
+                this.drawLightning(bolt);
+                return true;
+            }
+            return false;
         });
 
         this.time += 1;
@@ -124,7 +180,7 @@ class BokehParticles {
 
 // Initialize when DOM is ready
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => new BokehParticles());
+    document.addEventListener('DOMContentLoaded', () => new ElectricLightning());
 } else {
-    new BokehParticles();
+    new ElectricLightning();
 }

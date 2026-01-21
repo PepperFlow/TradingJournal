@@ -507,33 +507,39 @@ label {
 
 /* Pill Colors */
 .forex-pill {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
     color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .metals-pill {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    color: white;
+    background: linear-gradient(135deg, #b8860b 0%, #daa520 50%, #ffd700 100%);
+    color: #1a1a1a;
+    border: 1px solid rgba(255, 215, 0, 0.3);
 }
 
 .crypto-pill {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
     color: white;
+    border: 1px solid rgba(0, 242, 254, 0.3);
 }
 
 .futures-pill {
-    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    background: linear-gradient(135deg, #134e5e 0%, #71b280 100%);
     color: white;
+    border: 1px solid rgba(113, 178, 128, 0.3);
 }
 
 .stocks-pill {
-    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%);
     color: white;
+    border: 1px solid rgba(138, 45, 226, 0.3);
 }
 
 .nasdaq-pill {
-    background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+    background: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%);
     color: white;
+    border: 1px solid rgba(255, 106, 0, 0.3);
 }
 
 /* Quick Picks */

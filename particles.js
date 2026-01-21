@@ -1,21 +1,18 @@
-// Nebula/Galaxy Background Animation
-class NebulaBackground {
+// Bokeh Light Particles Background
+class BokehParticles {
     constructor() {
         this.canvas = document.getElementById('particles-canvas');
         this.ctx = this.canvas.getContext('2d');
-        this.stars = [];
-        this.nebulaClouds = [];
+        this.particles = [];
         this.time = 0;
 
         this.resize();
-        this.createStars();
-        this.createNebulaClouds();
+        this.createParticles();
         this.animate();
 
         window.addEventListener('resize', () => {
             this.resize();
-            this.createStars();
-            this.createNebulaClouds();
+            this.createParticles();
         });
     }
 
@@ -24,130 +21,101 @@ class NebulaBackground {
         this.canvas.height = window.innerHeight;
     }
 
-    createStars() {
-        this.stars = [];
-        const starCount = 200;
-
-        for (let i = 0; i < starCount; i++) {
-            this.stars.push({
-                x: Math.random() * this.canvas.width,
-                y: Math.random() * this.canvas.height,
-                size: Math.random() * 2 + 0.5,
-                speedX: (Math.random() - 0.5) * 0.3,
-                speedY: (Math.random() - 0.5) * 0.3,
-                twinkleSpeed: Math.random() * 0.05 + 0.02,
-                twinklePhase: Math.random() * Math.PI * 2,
-                brightness: Math.random()
-            });
-        }
-    }
-
-    createNebulaClouds() {
-        this.nebulaClouds = [];
-        const cloudCount = 8;
+    createParticles() {
+        this.particles = [];
+        const particleCount = 35;
 
         const colors = [
-            { r: 102, g: 126, b: 234 },  // Blue-purple
-            { r: 118, g: 75, b: 162 },   // Purple
-            { r: 245, g: 87, b: 108 },   // Pink
-            { r: 56, g: 239, b: 125 },   // Green
-            { r: 255, g: 167, b: 81 }    // Orange
+            { r: 102, g: 126, b: 234, name: 'blue' },      // Primary blue
+            { r: 118, g: 75, b: 162, name: 'purple' },     // Purple
+            { r: 56, g: 239, b: 125, name: 'green' },      // Success green
+            { r: 245, g: 87, b: 108, name: 'pink' },       // Danger pink
+            { r: 255, g: 167, b: 81, name: 'orange' }      // Warning orange
         ];
 
-        for (let i = 0; i < cloudCount; i++) {
+        for (let i = 0; i < particleCount; i++) {
             const color = colors[Math.floor(Math.random() * colors.length)];
-            this.nebulaClouds.push({
+            this.particles.push({
                 x: Math.random() * this.canvas.width,
                 y: Math.random() * this.canvas.height,
-                radius: Math.random() * 200 + 150,
-                speedX: (Math.random() - 0.5) * 0.2,
-                speedY: (Math.random() - 0.5) * 0.2,
+                size: Math.random() * 80 + 40,
+                speedX: (Math.random() - 0.5) * 0.5,
+                speedY: (Math.random() - 0.5) * 0.5,
                 color: color,
-                opacity: Math.random() * 0.15 + 0.05,
+                opacity: Math.random() * 0.3 + 0.1,
                 pulseSpeed: Math.random() * 0.02 + 0.01,
-                pulsePhase: Math.random() * Math.PI * 2
+                pulsePhase: Math.random() * Math.PI * 2,
+                blur: Math.random() * 20 + 10
             });
         }
     }
 
-    drawNebulaClouds() {
-        this.nebulaClouds.forEach(cloud => {
-            // Update position
-            cloud.x += cloud.speedX;
-            cloud.y += cloud.speedY;
+    drawBokeh(particle) {
+        // Update position
+        particle.x += particle.speedX;
+        particle.y += particle.speedY;
 
-            // Wrap around
-            if (cloud.x > this.canvas.width + cloud.radius) cloud.x = -cloud.radius;
-            if (cloud.x < -cloud.radius) cloud.x = this.canvas.width + cloud.radius;
-            if (cloud.y > this.canvas.height + cloud.radius) cloud.y = -cloud.radius;
-            if (cloud.y < -cloud.radius) cloud.y = this.canvas.height + cloud.radius;
+        // Wrap around screen
+        if (particle.x > this.canvas.width + particle.size) {
+            particle.x = -particle.size;
+        }
+        if (particle.x < -particle.size) {
+            particle.x = this.canvas.width + particle.size;
+        }
+        if (particle.y > this.canvas.height + particle.size) {
+            particle.y = -particle.size;
+        }
+        if (particle.y < -particle.size) {
+            particle.y = this.canvas.height + particle.size;
+        }
 
-            // Pulsing opacity
-            const pulse = Math.sin(this.time * cloud.pulseSpeed + cloud.pulsePhase);
-            const opacity = cloud.opacity + pulse * 0.05;
+        // Pulsing effect
+        const pulse = Math.sin(this.time * particle.pulseSpeed + particle.pulsePhase);
+        const currentOpacity = particle.opacity + pulse * 0.1;
+        const currentSize = particle.size + pulse * 10;
 
-            // Create radial gradient
-            const gradient = this.ctx.createRadialGradient(
-                cloud.x, cloud.y, 0,
-                cloud.x, cloud.y, cloud.radius
-            );
+        // Save context for individual blur
+        this.ctx.save();
 
-            gradient.addColorStop(0, `rgba(${cloud.color.r}, ${cloud.color.g}, ${cloud.color.b}, ${opacity})`);
-            gradient.addColorStop(0.5, `rgba(${cloud.color.r}, ${cloud.color.g}, ${cloud.color.b}, ${opacity * 0.5})`);
-            gradient.addColorStop(1, `rgba(${cloud.color.r}, ${cloud.color.g}, ${cloud.color.b}, 0)`);
+        // Apply blur effect
+        this.ctx.filter = `blur(${particle.blur}px)`;
 
-            this.ctx.fillStyle = gradient;
-            this.ctx.fillRect(
-                cloud.x - cloud.radius,
-                cloud.y - cloud.radius,
-                cloud.radius * 2,
-                cloud.radius * 2
-            );
-        });
-    }
+        // Create radial gradient for bokeh effect
+        const gradient = this.ctx.createRadialGradient(
+            particle.x, particle.y, 0,
+            particle.x, particle.y, currentSize
+        );
 
-    drawStars() {
-        this.stars.forEach(star => {
-            // Update position
-            star.x += star.speedX;
-            star.y += star.speedY;
+        // Bokeh circle has bright center and fades out
+        gradient.addColorStop(0, `rgba(${particle.color.r}, ${particle.color.g}, ${particle.color.b}, ${currentOpacity * 1.2})`);
+        gradient.addColorStop(0.4, `rgba(${particle.color.r}, ${particle.color.g}, ${particle.color.b}, ${currentOpacity})`);
+        gradient.addColorStop(1, `rgba(${particle.color.r}, ${particle.color.g}, ${particle.color.b}, 0)`);
 
-            // Wrap around
-            if (star.x > this.canvas.width) star.x = 0;
-            if (star.x < 0) star.x = this.canvas.width;
-            if (star.y > this.canvas.height) star.y = 0;
-            if (star.y < 0) star.y = this.canvas.height;
+        // Draw bokeh circle
+        this.ctx.beginPath();
+        this.ctx.arc(particle.x, particle.y, currentSize, 0, Math.PI * 2);
+        this.ctx.fillStyle = gradient;
+        this.ctx.fill();
 
-            // Twinkle effect
-            const twinkle = Math.sin(this.time * star.twinkleSpeed + star.twinklePhase);
-            const alpha = 0.5 + (twinkle + 1) / 2 * 0.5;
+        // Add subtle ring effect for more realistic bokeh
+        this.ctx.beginPath();
+        this.ctx.arc(particle.x, particle.y, currentSize * 0.7, 0, Math.PI * 2);
+        this.ctx.strokeStyle = `rgba(255, 255, 255, ${currentOpacity * 0.3})`;
+        this.ctx.lineWidth = 2;
+        this.ctx.stroke();
 
-            // Draw star
-            this.ctx.beginPath();
-            this.ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-            this.ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
-            this.ctx.fill();
-
-            // Add glow for larger stars
-            if (star.size > 1.5) {
-                this.ctx.beginPath();
-                this.ctx.arc(star.x, star.y, star.size * 2, 0, Math.PI * 2);
-                this.ctx.fillStyle = `rgba(200, 220, 255, ${alpha * 0.2})`;
-                this.ctx.fill();
-            }
-        });
+        this.ctx.restore();
     }
 
     animate() {
-        // Clear with slight fade for trail effect
-        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        // Clear canvas with slight fade
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.02)';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        // Draw nebula clouds first (background)
-        this.drawNebulaClouds();
-
-        // Draw stars on top
-        this.drawStars();
+        // Draw all bokeh particles
+        this.particles.forEach(particle => {
+            this.drawBokeh(particle);
+        });
 
         this.time += 1;
         requestAnimationFrame(() => this.animate());
@@ -156,7 +124,7 @@ class NebulaBackground {
 
 // Initialize when DOM is ready
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => new NebulaBackground());
+    document.addEventListener('DOMContentLoaded', () => new BokehParticles());
 } else {
-    new NebulaBackground();
+    new BokehParticles();
 }

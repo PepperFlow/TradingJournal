@@ -9,9 +9,20 @@ document.addEventListener('DOMContentLoaded', () => {
     themeToggle.addEventListener('click', () => {
         const currentTheme = document.documentElement.getAttribute('data-theme');
         const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-        document.documentElement.setAttribute('data-theme', newTheme);
+        document.elementElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
         updateThemeIcon(newTheme);
+    });
+
+    // Language handling
+    const languageSelector = document.getElementById('language-selector');
+    const savedLanguage = localStorage.getItem('language') || 'sv';
+    languageSelector.value = savedLanguage;
+
+    languageSelector.addEventListener('change', (e) => {
+        const newLanguage = e.target.value;
+        localStorage.setItem('language', newLanguage);
+        location.reload(); // Reload to apply new language
     });
 
     function updateThemeIcon(theme) {
